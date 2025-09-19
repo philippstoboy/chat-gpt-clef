@@ -1,5 +1,6 @@
 import com.replaymod.gradle.preprocess.PreprocessTask
 
+
 buildscript {
     def (major, minor, patch) = project.name.split("-")[0].tokenize('.')
     project.ext.mcVersion = "${major}${minor.padLeft(2, '0')}${(patch ?: '').padLeft(2, '0')}" as int
@@ -48,7 +49,6 @@ def mappingsVersions = [
 12006: "1.20.6+build.3",
 12100: "1.21+build.9",
 12101: "1.21.1+build.3",
-12104: "1.21.4+build.8"
 ]
 
 def fabricApiVersions = [
@@ -64,23 +64,16 @@ def fabricApiVersions = [
 12006: "0.100.0+1.20.6",
 12100: "0.100.7+1.21",
 12101: "0.110.0+1.21.1",
-12104: "0.111.0+1.21.4"
 ]
 
 
 repositories {
     mavenCentral()
-    if(project.name!="1.21.4") {
-
-        maven {
-            name = "MiranCZRepo"
-            url = "https://mirancz.github.io/maven/"
-            artifactUrls("https://mirancz.github.io/maven/cabaletta/baritone-unoptimized/${project.name}")
-        }
-    }else {
-
+    maven {
+        name = "MiranCZRepo"
+        url = "https://mirancz.github.io/maven/"
+        artifactUrls("https://mirancz.github.io/maven/cabaletta/baritone-unoptimized/${project.name}")
     }
-
     maven {
         name = 'babbaj-repo'
         url = 'https://babbaj.github.io/maven/'
@@ -96,9 +89,6 @@ repositories {
 
 dependencies {
     //to change the versions see the gradle.properties file
-
-    modImplementation name: "baritone-unoptimized-fabric-1.13.1"
-    include          name: "baritone-unoptimized-fabric-1.13.1"
     minecraft("com.mojang:minecraft:${project.name}")
     mappings("net.fabricmc:yarn:${mappingsVersions[mcVersion]}:v2")
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
@@ -121,7 +111,15 @@ dependencies {
     shadow('com.fasterxml.jackson.core:jackson-annotations:2.16.0')
     shadow('com.fasterxml.jackson.core:jackson-databind:2.16.0')
 
-
+    // Thank you georgeagostino for fixing my garbage
+    if (getProject().hasProperty("altoclef.development")) {
+        // Must run build from baritone-plus once
+        modImplementation "baritone-api-fabric:baritone-unoptimized-fabric-${project.name}"
+        include "baritone-api-fabric:baritone-unoptimized-fabric-${project.name}"
+    } else {
+        modImplementation "cabaletta:baritone-unoptimized-fabric:${project.name}"
+        include "cabaletta:baritone-unoptimized-fabric:${project.name}"
+    }
     //modImplementation 'baritone-api-fabric:baritone-api-fabric:1.6.3'
     //implementation files('baritone-plus/build/libs/baritone-unoptimized-fabric-1.6.3.jar')
     implementation 'org.apache.httpcomponents:httpmime:4.5.14';

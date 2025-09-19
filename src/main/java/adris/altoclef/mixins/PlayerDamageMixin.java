@@ -17,11 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientPlayerEntity.class)
 public class PlayerDamageMixin {
-    
-    @Inject(
-        method = "damage",
-        at = @At("HEAD")
-    )
+
+    @Inject(method = "damage", at = @At("HEAD"))
     public void applyDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
         // System.out.println("DAMAGED: " + source.getAttacker() + " " + source.getName());
         // PlayerEntity p = (PlayerEntity) ((Object)this);

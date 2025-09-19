@@ -100,7 +100,7 @@ public class PlayerDefenseChain extends SingleTaskChain {
             // unknown. Perform inferrence.
             if (_recentlyDamagedUnknown == null || _recentlyDamagedUnknown.elapsed()) {
                 _recentlyDamagedUnknown = new TimerGame(0.3);
-                _recentlyDamagedUnknown.reset();                    
+                _recentlyDamagedUnknown.reset();
             }
             processMaybeDamaged();
             return;
