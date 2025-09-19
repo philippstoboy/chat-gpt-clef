@@ -111,5 +111,7 @@ If you would like, I can expand the placeholder sections (5–9) or add:
 - Version adding walkthrough
 - Troubleshooting matrix
 
-Let me know and I will extend this English version accordingly.
+---
+
+You can use this mod with Meteor Build 0.5.8 and my Baritone Disabler Mod: https://github.com/philippstoboy/Meteor-Baritone-Disabler
 
