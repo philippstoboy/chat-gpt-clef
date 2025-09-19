@@ -17,12 +17,6 @@ ChatGPTClef is a client-side Minecraft (Fabric) AI copilot that can autonomously
 1. Quick Start
 2. OpenAI Backend Configuration
 3. Installation & Multi-Version Build
-4. Usage & Commands (summary)
-5. Data & Logs (placeholder – not included in shortened German version)
-6. Adding a New Minecraft Version (placeholder)
-7. Development / Baritone Fork (placeholder)
-8. Architecture Overview (placeholder)
-9. Troubleshooting & FAQ (placeholder)
 10. Security & Notes
 11. License
 12. Example Session
