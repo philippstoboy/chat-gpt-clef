@@ -33,6 +33,8 @@ ChatGPTClef is a client-side Minecraft (Fabric) AI copilot that can autonomously
 6. (Reserved for future: configure keybinds/extra setup.)
 
 Prebuilt jars: See releases – each version produces `<mcVersion>-<mod_version>.jar`.
+When using prebuild: Use in Prism Launcher and add an Enviroment Variable like this:
+https://prnt.sc/p9x5staXs7eQ
 
 ---
 ## 2. OpenAI Backend Configuration
