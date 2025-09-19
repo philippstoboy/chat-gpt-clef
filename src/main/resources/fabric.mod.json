@@ -1,19 +1,15 @@
 {
-  "depends": {
-    "fabricloader": ">=0.16.9",
-    "minecraft": "1.21.4",
-    "fabric-api": ">=0.111.0"
-  },
   "schemaVersion": 1,
   "id": "altoclef",
   "version": "${version}",
-  "name": "Alto Clef",
+  "name": "ChatGPTClef",
   "description": "Plays Block Game",
   "authors": [
     "TacoTechnica",
     "James Green",
     "Marvion Kirito",
-    "MiranCZ"
+    "MiranCZ",
+    "Modified my Aspect"
   ],
   "contact": {
     "homepage": "https://github.com/MiranCZ/altoclef",

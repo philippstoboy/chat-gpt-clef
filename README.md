@@ -1,53 +1,104 @@
-# ChatClef  
-<p align="center">
-<img src="https://cdn.elefant.gg/image/png/chatclef_new_logo.png" width="45%"/>
-</p>
+# ChatGPTClef
 
-## ChatClef is a Minecraft AI copilot mod that can play the game for you or with you. 
+## Kurzbeschreibung
+ChatGPTClef ist ein clientseitiger Minecraft (Fabric) KI‑Copilot, der eigenständig Aufgaben ausführt (vom Ressourcensammeln bis zum Durchspielen) oder dich als zweiter Spieler unterstützt. Ursprünglich auf Player2/AltoClef/Baritone aufbauend, kann diese Variante direkt das OpenAI Chat Completions API (JSON Schema Output) nutzen. Player2 fungiert als Fallback, falls keine OpenAI API Keys bereitstehen.
 
-Download the [Player2 app](https://player2.game/), and install Fabric API and this mod in Minecraft to play. You **do not** need to install AltoClef or Baritone separately.
+## Kernfeatures
+- Automatisches Ausführen komplexer Aufgaben (Farmen, Crafting, Exploration, Kampf, Enderdrache besiegen)
+- Sprach-/Textinteraktion (Standard Hotkey: `Z`) – konfigurierbar
+- Kontextbewusst: Hält Gesprächs- & Status-Historie (Inventar-/Welt-/Agentenstatus)
+- Befehls- & Aufgabenpipeline über Präfix `@` (z.B. `@gamer`, `@stop`)
+- Modularer LLM Backend Layer (OpenAI oder Player2 Fallback)
+- Multi-Version Build (mehrere Minecraft Versionen parallel in einem Repo)
+- Anpassbares System-Prompt & erweiterbare Commands
 
-It automates Minecraft tasks from start to finish, including beating the game completely solo. Press Z key to talk to the AI using voice chat.
+---
+## Inhaltsverzeichnis
+1. Schnellstart
+2. OpenAI Backend Konfiguration
+3. Installation & Build (Multi-Version)
+4. Nutzung & Befehle
+5. Speicherort von Daten & Logs
+6. Hinzufügen einer neuen Minecraft Version (Beispiel 1.21.4)
+7. Entwicklung / Baritone Fork Integration
+8. Architekturüberblick
+9. Troubleshooting & FAQ
+10. Sicherheit & Hinweise
+11. Lizenz
 
-👉 [Check releases](https://github.com/elefant-ai/chatclef/releases)
+---
+## 1. Schnellstart
+1. Java (Temurin/OpenJDK) installieren – für 1.20.6+ wird Java 21 genutzt, darunter Java 17.
+2. Repo klonen.
+3. In IntelliJ (empfohlen) öffnen – Gradle sync abwarten.
+4. OpenAI API Key anlegen und als Umgebungvariable setzen (siehe Abschnitt 2).
+5. Gradle-Task `:1.21.1:runClient` (oder gewünschte Versions-Submodul) starten.
+6. 
 
-## What is ChatClef?
+Prebuilt Jars: Siehe Releases – jede Version erzeugt `<mcVersion>-<mod_version>.jar`.
 
-ChatClef is a client-side AI mod designed to be your Minecraft copilot/friend.
-If you can open a second client, ChatClef can take over that instance and act as a second AI-controlled player in multiplayer.
+---
+## 2. OpenAI Backend Konfiguration
+Der Code prüft beim Start:
+- `OPENAI_API_KEY` – wenn vorhanden & nicht leer, wird das OpenAI Backend genutzt.
+- Optional: `OPENAI_MODEL` (Standard: `gpt-4o-mini`)
+- Optional: `OPENAI_BASE_URL` (Standard: `https://api.openai.com` – nützlich für Azure/OpenAI-kompatible Proxys)
 
-To get the AI working, you need to have the [Player2 app](https://player2.game/), install Fabric API and this mod in Minecraft, and start Minecraft.
-Once installed, the AI will be able to:
+Wenn kein Key gefunden wird, fällt ChatGPTClef automatisch auf das Player2 Backend zurück (sofern Player2 App läuft).
 
-- Chat with you
-- Complete tasks for you
-- Beat the game solo
-- Or just mess around with you like a chaotic Minecraft sidekick
 
-It builds on top of [Player2](https://player2.game), [AltoClef](https://github.com/MiranCZ/altoclef) and [Baritone](https://github.com/cabaletta/baritone). It’s completely free, open-source, and constantly being improved.
+### 2.1 Mögliche Fehler
+Ohne Key: Log zeigt `[ChatGPTClef] Using Player2 backend`. Bei Key: `[ChatGPTClef] Using OpenAI backend`.
+Ein Fehler `OPENAI_API_KEY missing` bedeutet, dass versucht wurde, das Backend ohne gültigen Key zu initialisieren.
+
+---
+## 3. Installation & Build
+### 3.1 Voraussetzungen
+- Git
+- Java 21 (für 1.20.6+); Java 17 für ältere Versionen (<1.20.6). Projekt konfiguriert dies automatisch per `build.gradle`.
+- Gradle Wrapper (liegt bei)
+
+### 3.2 Projekt klonen
+```
+git clone <repo-url>
+cd chat-gpt-clef-main
+```
+
+### 3.3 Alle Jars bauen
+```
+./gradlew build        (Linux/macOS)
+gradlew.bat build      (Windows)
+```
+Artefakte liegen dann unter `versions/<mcVersion>/build/libs/`.
+
+### 3.4 Einzelne Version starten
+```
+gradlew.bat :1.21.1:runClient
+```
+Andere Version analog (`:1.20.6:runClient`).
+
+### 3.5 Alle Versionen Jars sammeln
+Script: `gather_jars.sh` oder PowerShell Variante `gather_jars.ps1` (kopiert Jars nach `./build`).
+
+---
+## 10. Sicherheit & Hinweise
+- OpenAI Schlüssel niemals veröffentlichen oder commiten.
+- Logs können Gesprächsinhalte enthalten; bei Weitergabe anonymisieren.
+- Einsatz auf Multiplayer-Servern: Beachte deren Regeln (Automatisierung kann verboten sein).
+- Verantwortung: Nutzung auf eigenes Risiko – keine Garantie für fehlerfreies Verhalten.
+
+---
+## 11. Lizenz
+Siehe `LICENSE` Datei. Ursprungsprojekte: AltoClef, Baritone, Player2 (danke an deren Maintainer & Community).
 
 ---
 
-## How it works
-This mod adds the Player2 interface to [AltoClef](https://github.com/MiranCZ/altoclef) and [Baritone](https://github.com/cabaletta/baritone).
-The Player2 App provides free STT, TTS, and LLM functions. Make sure the Player2 App is running while using this mod.
-Press Z to talk to the AI using voice. You can change the key binding in settings.
-Memory and conversation history are stored in the mod folder under the AI's name if you need to view them.
-Be careful not to edit the file if you don't know what you are doing, we won't be responsible if your edit cause any problems.
 
----
+## Kurze Beispiel-Session (OpenAI aktiv)
+1. Spiel starten (`gradlew :1.21.1:runClient`)
+2. Frage im Chat: "Kannst du mir 10 Eisen besorgen?"
+3. KI plant & führt Mining/Routen aus
+4. Just talk to the AI and ask it for status
+5. Just talk to the AI and tell it to Stop
 
-## Download
-
-**Note:** After installing, please move/delete your old Baritone configurations if you have any.  
-Existing Baritone configs can interfere with ChatClef and introduce bugs (this will be fixed in the future).
-
----
-
-## Development Setup
-
-Simply open the project in a java IDE such as IntelliJ or Eclipse, then change your SDK to a valid version (we used temurin-21), then wait for the project to build. Once you do, you should be able to run Gradle tasks such as runClient to test the bot, and build to build the jar files. To collect all of the jar files for different versions into a single folder, run `project_root/gather_jars.sh`, which will copy all of the jar files to `project_root/build`.
-
----
-
-
+Viel Spaß beim Experimentieren mit ChatGPTClef!

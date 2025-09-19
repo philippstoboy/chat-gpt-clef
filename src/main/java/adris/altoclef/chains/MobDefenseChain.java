@@ -263,7 +263,7 @@ public class MobDefenseChain extends SingleTaskChain {
             if (isProjectileClose(mod)) {
                 runAwayTask = new DodgeProjectilesTask(ARROW_KEEP_DISTANCE_HORIZONTAL, ARROW_KEEP_DISTANCE_VERTICAL);
                 setTask(runAwayTask);
-                return 65;    
+                return 65;
             }
         }
         // Dodge all mobs cause we boutta die son
@@ -325,11 +325,12 @@ public class MobDefenseChain extends SingleTaskChain {
             if (!toDealWithList.isEmpty()) {
 
                 // Depending on our weapons/armor, we may choose to straight up kill hostiles if we're not dodging their arrows.
-                Item bestWeaponItem = getBestWeapon(mod);
-                float damage = bestWeaponItem == null ? 0 : (bestWeaponItem.getMaterial().getAttackDamage()) + 1;
+                ToolItem bestWeapon = getBestWeapon(mod);
 
                 int armor = mod.getPlayer().getArmor();
-                int shield = hasShield(mod) && bestWeaponItem != null ? 3 : 0;
+                float damage = bestWeapon == null ? 0 : (bestWeapon.getMaterial().getAttackDamage()) + 1;
+
+                int shield = hasShield(mod) && bestWeapon != null ? 3 : 0;
 
                 int canDealWith = (int) Math.ceil((armor * 3.6 / 20.0) + (damage * 0.8) + (shield));
 
@@ -380,9 +381,9 @@ public class MobDefenseChain extends SingleTaskChain {
 
     public static ToolItem getBestWeapon(AltoClef mod) {
         Item[] WEAPONS = new Item[]{
-            Items.NETHERITE_SWORD, Items.NETHERITE_AXE, Items.DIAMOND_SWORD, Items.DIAMOND_AXE,
-            Items.IRON_SWORD, Items.IRON_AXE, Items.GOLDEN_SWORD, Items.GOLDEN_AXE,
-            Items.STONE_SWORD, Items.STONE_AXE, Items.WOODEN_SWORD, Items.WOODEN_AXE
+                Items.NETHERITE_SWORD, Items.NETHERITE_AXE, Items.DIAMOND_SWORD, Items.DIAMOND_AXE,
+                Items.IRON_SWORD, Items.IRON_AXE, Items.GOLDEN_SWORD, Items.GOLDEN_AXE,
+                Items.STONE_SWORD, Items.STONE_AXE, Items.WOODEN_SWORD, Items.WOODEN_AXE
         };
 
         ToolItem bestSword = null;
@@ -652,4 +653,3 @@ public class MobDefenseChain extends SingleTaskChain {
         return "Mob Defense";
     }
 }
-
