@@ -1,104 +1,119 @@
 # ChatGPTClef
 
-## Kurzbeschreibung
-ChatGPTClef ist ein clientseitiger Minecraft (Fabric) KI‑Copilot, der eigenständig Aufgaben ausführt (vom Ressourcensammeln bis zum Durchspielen) oder dich als zweiter Spieler unterstützt. Ursprünglich auf Player2/AltoClef/Baritone aufbauend, kann diese Variante direkt das OpenAI Chat Completions API (JSON Schema Output) nutzen. Player2 fungiert als Fallback, falls keine OpenAI API Keys bereitstehen.
+## Short Description
+ChatGPTClef is a client-side Minecraft (Fabric) AI copilot that can autonomously perform tasks (from gathering resources to beating the game) or accompany you as a second player. Originally built on Player2/AltoClef/Baritone, this variant can directly use the OpenAI Chat Completions API (JSON Schema output). Player2 acts as a fallback if no OpenAI API key is present.
 
-## Kernfeatures
-- Automatisches Ausführen komplexer Aufgaben (Farmen, Crafting, Exploration, Kampf, Enderdrache besiegen)
-- Sprach-/Textinteraktion (Standard Hotkey: `Z`) – konfigurierbar
-- Kontextbewusst: Hält Gesprächs- & Status-Historie (Inventar-/Welt-/Agentenstatus)
-- Befehls- & Aufgabenpipeline über Präfix `@` (z.B. `@gamer`, `@stop`)
-- Modularer LLM Backend Layer (OpenAI oder Player2 Fallback)
-- Multi-Version Build (mehrere Minecraft Versionen parallel in einem Repo)
-- Anpassbares System-Prompt & erweiterbare Commands
-
----
-## Inhaltsverzeichnis
-1. Schnellstart
-2. OpenAI Backend Konfiguration
-3. Installation & Build (Multi-Version)
-4. Nutzung & Befehle
-5. Speicherort von Daten & Logs
-6. Hinzufügen einer neuen Minecraft Version (Beispiel 1.21.4)
-7. Entwicklung / Baritone Fork Integration
-8. Architekturüberblick
-9. Troubleshooting & FAQ
-10. Sicherheit & Hinweise
-11. Lizenz
+## Key Features
+- Automates complex gameplay (farming, crafting, exploration, combat, defeating the Ender Dragon)
+- Voice/Text interaction (default hotkey: `Z`) – configurable
+- Context awareness: maintains conversation & status history (inventory, world, agent state)
+- Command / task pipeline via prefix `@` (e.g. `@gamer`, `@stop`)
+- Modular LLM backend layer (OpenAI or Player2 fallback)
+- Multi-version build (multiple Minecraft versions in one repository)
+- Adjustable system prompt & extensible commands
 
 ---
-## 1. Schnellstart
-1. Java (Temurin/OpenJDK) installieren – für 1.20.6+ wird Java 21 genutzt, darunter Java 17.
-2. Repo klonen.
-3. In IntelliJ (empfohlen) öffnen – Gradle sync abwarten.
-4. OpenAI API Key anlegen und als Umgebungvariable setzen (siehe Abschnitt 2).
-5. Gradle-Task `:1.21.1:runClient` (oder gewünschte Versions-Submodul) starten.
-6. 
+## Table of Contents
+1. Quick Start
+2. OpenAI Backend Configuration
+3. Installation & Multi-Version Build
+4. Usage & Commands (summary)
+5. Data & Logs (placeholder – not included in shortened German version)
+6. Adding a New Minecraft Version (placeholder)
+7. Development / Baritone Fork (placeholder)
+8. Architecture Overview (placeholder)
+9. Troubleshooting & FAQ (placeholder)
+10. Security & Notes
+11. License
+12. Example Session
 
-Prebuilt Jars: Siehe Releases – jede Version erzeugt `<mcVersion>-<mod_version>.jar`.
-
----
-## 2. OpenAI Backend Konfiguration
-Der Code prüft beim Start:
-- `OPENAI_API_KEY` – wenn vorhanden & nicht leer, wird das OpenAI Backend genutzt.
-- Optional: `OPENAI_MODEL` (Standard: `gpt-4o-mini`)
-- Optional: `OPENAI_BASE_URL` (Standard: `https://api.openai.com` – nützlich für Azure/OpenAI-kompatible Proxys)
-
-Wenn kein Key gefunden wird, fällt ChatGPTClef automatisch auf das Player2 Backend zurück (sofern Player2 App läuft).
-
-
-### 2.1 Mögliche Fehler
-Ohne Key: Log zeigt `[ChatGPTClef] Using Player2 backend`. Bei Key: `[ChatGPTClef] Using OpenAI backend`.
-Ein Fehler `OPENAI_API_KEY missing` bedeutet, dass versucht wurde, das Backend ohne gültigen Key zu initialisieren.
+(Sections 5–9 were listed in the German table of contents but not expanded there; placeholders are kept here for structural parity. If you want them filled, let me know.)
 
 ---
-## 3. Installation & Build
-### 3.1 Voraussetzungen
+## 1. Quick Start
+1. Install Java (Temurin/OpenJDK). Use Java 21 for 1.20.6+; Java 17 for older versions (< 1.20.6).  
+2. Clone the repository.  
+3. Open it in IntelliJ (recommended) and wait for Gradle sync.  
+4. Create an OpenAI API key and set it as an environment variable (see section 2).  
+5. Run the Gradle task `:1.21.1:runClient` (or the target version subproject).  
+6. (Reserved for future: configure keybinds/extra setup.)
+
+Prebuilt jars: See releases – each version produces `<mcVersion>-<mod_version>.jar`.
+
+---
+## 2. OpenAI Backend Configuration
+At startup the code checks:
+- `OPENAI_API_KEY` – if present and non-empty, the OpenAI backend is used.
+- Optional: `OPENAI_MODEL` (default: `gpt-4o-mini`)
+- Optional: `OPENAI_BASE_URL` (default: `https://api.openai.com`, useful for Azure/OpenAI-compatible proxies)
+
+If no key is found, ChatGPTClef automatically falls back to the Player2 backend (if the Player2 app is running).
+
+### 2.1 Possible Errors / Messages
+- Without key: log shows `[ChatGPTClef] Using Player2 backend`.
+- With key: log shows `[ChatGPTClef] Using OpenAI backend`.
+- Error `OPENAI_API_KEY missing`: code attempted to initialize the OpenAI backend without a valid key.
+
+---
+## 3. Installation & Multi-Version Build
+### 3.1 Requirements
 - Git
-- Java 21 (für 1.20.6+); Java 17 für ältere Versionen (<1.20.6). Projekt konfiguriert dies automatisch per `build.gradle`.
-- Gradle Wrapper (liegt bei)
+- Java 21 (for 1.20.6+) or Java 17 (for older versions)
+- Gradle Wrapper (included)
 
-### 3.2 Projekt klonen
+### 3.2 Clone Project
 ```
 git clone <repo-url>
 cd chat-gpt-clef-main
 ```
 
-### 3.3 Alle Jars bauen
+### 3.3 Build All Jars
 ```
-./gradlew build        (Linux/macOS)
-gradlew.bat build      (Windows)
+./gradlew build        # Linux/macOS
+gradlew.bat build      # Windows
 ```
-Artefakte liegen dann unter `versions/<mcVersion>/build/libs/`.
+Artifacts are placed under: `versions/<mcVersion>/build/libs/`.
 
-### 3.4 Einzelne Version starten
+### 3.4 Run a Specific Version
 ```
 gradlew.bat :1.21.1:runClient
 ```
-Andere Version analog (`:1.20.6:runClient`).
+(Replace `1.21.1` with another supported version, e.g. `:1.20.6:runClient`.)
 
-### 3.5 Alle Versionen Jars sammeln
-Script: `gather_jars.sh` oder PowerShell Variante `gather_jars.ps1` (kopiert Jars nach `./build`).
-
----
-## 10. Sicherheit & Hinweise
-- OpenAI Schlüssel niemals veröffentlichen oder commiten.
-- Logs können Gesprächsinhalte enthalten; bei Weitergabe anonymisieren.
-- Einsatz auf Multiplayer-Servern: Beachte deren Regeln (Automatisierung kann verboten sein).
-- Verantwortung: Nutzung auf eigenes Risiko – keine Garantie für fehlerfreies Verhalten.
+### 3.5 Collect All Version Jars
+Use the script: `gather_jars.sh` (Unix) or `gather_jars.ps1` (PowerShell). Copies jars into `./build`.
 
 ---
-## 11. Lizenz
-Siehe `LICENSE` Datei. Ursprungsprojekte: AltoClef, Baritone, Player2 (danke an deren Maintainer & Community).
+## 10. Security & Notes
+- Never publish or commit your OpenAI key.
+- Logs may contain conversation fragments; sanitize before sharing.
+- Multiplayer: respect server rules—automation can be disallowed.
+- Use at your own risk—no guarantee of flawless behavior.
 
 ---
+## 11. License
+See the `LICENSE` file. Upstream projects: AltoClef, Baritone, Player2 (thanks to their maintainers & communities).
 
+---
+## 12. Short Example Session (OpenAI active)
+1. Start the game:  
+   ```
+   gradlew :1.21.1:runClient
+   ```
+2. In chat: `Can you get me 10 iron?`  
+3. The AI plans a route and mines resources.  
+4. Ask the AI for status (just talk/type).  
+5. Tell it to stop (e.g. say "Stop" or run `@stop`).
 
-## Kurze Beispiel-Session (OpenAI aktiv)
-1. Spiel starten (`gradlew :1.21.1:runClient`)
-2. Frage im Chat: "Kannst du mir 10 Eisen besorgen?"
-3. KI plant & führt Mining/Routen aus
-4. Just talk to the AI and ask it for status
-5. Just talk to the AI and tell it to Stop
+Enjoy experimenting with ChatGPTClef!
 
-Viel Spaß beim Experimentieren mit ChatGPTClef!
+---
+## Next Steps (Optional Enhancements)
+If you would like, I can expand the placeholder sections (5–9) or add:
+- Detailed architecture diagram
+- Command reference table
+- Version adding walkthrough
+- Troubleshooting matrix
+
+Let me know and I will extend this English version accordingly.
+
